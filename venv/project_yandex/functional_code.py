@@ -9,7 +9,7 @@ from PIL import Image
 class MyWidget(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi(r'D:\functions_drawing\venv\project_yandex\project.ui', self)
+        uic.loadUi(r'D:\functions_drawing\venv\project_yandex\project.ui', self) # делал конкретный путь, можно заменить
         self.pushButton.clicked.connect(self.painting)
     def painting(self):
         plt.ioff()
@@ -17,7 +17,7 @@ class MyWidget(QMainWindow):
         ax.set_title('Graph:', fontsize=12)
         plt.axis([-10, 10, -10, 10])
         x = np.arange(-10, 10, 0.01)
-        y = eval(self.lineEdit.text())
+        y = eval(self.lineEdit.text()) # планирую сделать безопасный eval, с проверкой на содержимое lineEdit'а
         ax.grid(color='grey',   # цвет линий # Сетка графика
                 linewidth=1,    # толщина # Сетка графика
                 linestyle='-')  # начертание # Сетка графика
