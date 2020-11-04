@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.Qt import pyqtSignal
-
+import sqlite3
 
 class MyWidget(QMainWindow):
     def __init__(self):
@@ -43,48 +43,70 @@ class Autorization(QWidget):
         super().__init__()
         uic.loadUi('authorization.ui', self)
         self.mainMenu = None
-        self.bd = dict()
         self.check = False
 
-        self.registerButton.clicked.connect(self.register)
-        self.loginButton.clicked.connect(self.login)
+        self.registerButton.clicked.connect(self.user_registration)
+        self.loginButton.clicked.connect(self.user_login)
 
-    def addBd(self, bd):
-        self.bd = bd
 
-    def getBd(sefl):
-        return self.bd
+    def user_login(self):
+        db = sqlite3.connect('accounts.sqlite')
+        sql = db.cursor()  # work with database
 
-    def register(self):
-        name = self.nickEdit.text()
-        password = self.passEdit.text()
-        if (name in self.bd.keys()):
-            if (len(name) < 4 and len(password) < 4):
-                self.warningLabel.setText("Short Nickname or password")
-            else:
-                self.warningLabel.setText("Username is taken!")
+        sql.execute("""CREATE TABLE IF NOT EXISTS users (
+            login TEXT, 
+            password TEXT 
+        )""")
+
+        db.commit()
+        user_login = self.nickEdit.text()
+        user_password = self.passEdit.text()
+        # reg
+        sql.execute(f"""SELECT LOGIN FROM users WHERE login = '{user_login}'""")
+        if sql.fetchone() is None:
+            self.warningLabel.setText('User is not registered')
+            #sql.execute(f"""INSERT INTO users VALUES (?, ?)""", (user_login, user_password))
+            #db.commit()
+            #print('Your account is registered')
         else:
-            if (len(name) < 4 and len(password) < 4):
-                self.warningLabel.setText("Short Nickname or password")
+            sql.execute(f"""SELECT LOGIN FROM users WHERE login = '{user_password}'""")
+            if sql.fetchone() is None:
+                self.warningLabel.setText('Wrong password')
             else:
-                self.bd[name] = password
+                self.check = True
                 self.mainMenu.setEnabled(True)
                 self.close()
-                return True
+    def user_registration(self):
+        db = sqlite3.connect('accounts.sqlite')
+        sql = db.cursor()  # work with database
 
-    def login(self):                                                ###адаптировать под SQL
-        name = self.nickEdit.text()
-        password = self.passEdit.text()
-        if (name in self.bd.keys() and len(name) > 3):
-            if (self.bd[name] != password and len(password) < 4):
-                self.warningLabel.setText("Wrong Password!")
-            else:
-                self.chek = True
+        sql.execute("""CREATE TABLE IF NOT EXISTS users (
+            login TEXT, 
+            password TEXT 
+        )""")
+
+        db.commit()
+        user_login = self.nickEdit.text()
+        user_password = self.passEdit.text()
+        # reg
+        if len(user_login) < 4:
+            self.warningLabel.setText('Too small login')
+            self.nickEdit.setText('')
+            self.passEdit.setText('')
+        elif len(user_password) < 4:
+            self.warningLabel.setText('Too small password')
+            self.nickEdit.setText('')
+            self.passEdit.setText('')
+        else:
+            sql.execute(f"""SELECT LOGIN FROM users WHERE login = '{user_login}'""")
+            if sql.fetchone() is None:
+                sql.execute(f"""INSERT INTO users VALUES (?, ?)""", (user_login, user_password))
+                db.commit()
+                self.check = True
                 self.mainMenu.setEnabled(True)
                 self.close()
-        else:
-            self.warningLabel.setText("Wrong Nickname!")
-
+            else:
+                self.warningLabel.setText('User is already registered')
     def checkAutorization(self):
         return self.check
 
@@ -99,12 +121,9 @@ class FuncPunk(QObject):
         self.mainMenu.show()
         self.mainMenu.setEnabled(False)
 
-        self.bd = dict()                                            ###адаптировать под SQL
-        self.bd["1234"] = "1234"
 
         self.autorization = Autorization()
         self.autorization.addMenu(self.mainMenu)
-        self.autorization.addBd(self.bd)
         self.autorization.show()
 
 
