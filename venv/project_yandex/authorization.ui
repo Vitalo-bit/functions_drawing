@@ -12,22 +12,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>230</height>
+    <width>418</width>
+    <height>338</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(255, 237, 161);</string>
+   <string notr="true">background-color: rgb(255, 216, 58);</string>
   </property>
   <widget class="QWidget" name="formLayoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>30</y>
-     <width>351</width>
+     <width>381</width>
      <height>61</height>
     </rect>
    </property>
@@ -36,8 +36,8 @@
      <widget class="QLabel" name="textNickname">
       <property name="font">
        <font>
-        <family>Modern No. 20</family>
-        <pointsize>16</pointsize>
+        <family>Franklin Gothic Medium Cond</family>
+        <pointsize>14</pointsize>
         <weight>50</weight>
         <bold>false</bold>
        </font>
@@ -48,14 +48,21 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLineEdit" name="passEdit"/>
+     <widget class="QLineEdit" name="passEdit">
+      <property name="contextMenuPolicy">
+       <enum>Qt::DefaultContextMenu</enum>
+      </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
+     </widget>
     </item>
     <item row="1" column="0">
      <widget class="QLabel" name="textPassword">
       <property name="font">
        <font>
-        <family>Modern No. 20</family>
-        <pointsize>16</pointsize>
+        <family>Franklin Gothic Medium Cond</family>
+        <pointsize>14</pointsize>
         <weight>50</weight>
         <bold>false</bold>
        </font>
@@ -75,32 +82,34 @@
     <rect>
      <x>20</x>
      <y>140</y>
-     <width>351</width>
+     <width>381</width>
      <height>61</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QPushButton" name="loginButton">
-      <property name="font">
-       <font>
-        <pointsize>16</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Login</string>
-      </property>
-     </widget>
-    </item>
-    <item>
      <widget class="QPushButton" name="registerButton">
       <property name="font">
        <font>
-        <pointsize>16</pointsize>
+        <family>Franklin Gothic Medium Cond</family>
+        <pointsize>12</pointsize>
        </font>
       </property>
       <property name="text">
        <string>Register</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="loginButton">
+      <property name="font">
+       <font>
+        <family>Franklin Gothic Medium Cond</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Login</string>
       </property>
      </widget>
     </item>
@@ -109,7 +118,7 @@
   <widget class="QLabel" name="warningLabel">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>40</x>
      <y>100</y>
      <width>351</width>
      <height>31</height>
@@ -117,11 +126,66 @@
    </property>
    <property name="font">
     <font>
+     <family>Franklin Gothic Medium Cond</family>
      <pointsize>12</pointsize>
     </font>
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="changeLabel">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>220</y>
+     <width>381</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Franklin Gothic Medium Cond</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>                               You want to change your password?</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>270</y>
+     <width>291</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Franklin Gothic Medium Cond</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="changebutton">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>300</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Franklin Gothic Medium Cond</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Change</string>
    </property>
   </widget>
  </widget>
