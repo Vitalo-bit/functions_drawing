@@ -9,11 +9,13 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.Qt import pyqtSignal
 import sqlite3
+from math import sin, cos, tan
+
 
 class Function_draw(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('project.ui', self)  # делал конкретный путь, можно заменить
+        uic.loadUi('project.ui', self)
         self.drawButton.clicked.connect(self.painting)
         self.backButton.clicked.connect(self.exit)
         self.mainMenu = None
@@ -22,12 +24,13 @@ class Function_draw(QMainWindow):
         plt.ioff()
         fig, ax = plt.subplots(figsize=(8, 8))
         ax.set_title('Graph:', fontsize=12)
-        plt.axis([-10, 10, -10, 10])
-        x = np.arange(-10, 10, 0.01)
-        if self.lineEdit.text() == '':
+        if self.lineEdit.text() == '' and self.NoneRadioButton.isChecked():
             self.error_Label.setText('Write a func')
-        else:
-            y = eval(self.lineEdit.text())  # планирую сделать безопасный eval, с проверкой на содержимое lineEdit'а
+        elif self.SinRadioButton.isChecked():
+            plt.axis([-10, 10, -10, 10])
+            x = np.arange(-10, 4 * np.pi, 0.1)  # start,stop,step
+            y = np.sin(x)
+            # не работает для sin, cos и тригонометрических функций
             ax.grid(color='grey',  # цвет линий # Сетка графика
                     linewidth=1,  # толщина # Сетка графика
                     linestyle='-')  # начертание # Сетка графика
@@ -41,12 +44,82 @@ class Function_draw(QMainWindow):
             new_image = image.resize((491, 491))
             new_image.save('a1b1c1.png')
             self.graphic_label.setPixmap(QPixmap('a1b1c1.png'))
+        elif self.TanRadioButton.isChecked():
+            plt.axis([-10, 10, -10, 10])
+            x = np.arange(-10, 4 * np.pi, 0.1)  # start,stop,step
+            y = np.tan(x)
+            # не работает для sin, cos и тригонометрических функций
+            ax.grid(color='grey',  # цвет линий # Сетка графика
+                    linewidth=1,  # толщина # Сетка графика
+                    linestyle='-')  # начертание # Сетка графика
+            plt.plot(x, y, "g-")  # Построение графика
+            # X - axis
+            ax.axhline(y=0, color='k')
+            # Y - axis
+            ax.axvline(x=0, color='k')
+            plt.savefig('abc.png')
+            image = Image.open('abc.png')
+            new_image = image.resize((491, 491))
+            new_image.save('a1b1c1.png')
+            self.graphic_label.setPixmap(QPixmap('a1b1c1.png'))
+        elif self.CosRadioButton.isChecked():
+            plt.axis([-10, 10, -10, 10])
+            x = np.arange(-10, 4 * np.pi, 0.1)  # start,stop,step
+            y = np.cos(x)
+            # не работает для sin, cos и тригонометрических функций
+            ax.grid(color='grey',  # цвет линий # Сетка графика
+                    linewidth=1,  # толщина # Сетка графика
+                    linestyle='-')  # начертание # Сетка графика
+            plt.plot(x, y, "g-")  # Построение графика
+            # X - axis
+            ax.axhline(y=0, color='k')
+            # Y - axis
+            ax.axvline(x=0, color='k')
+            plt.savefig('abc.png')
+            image = Image.open('abc.png')
+            new_image = image.resize((491, 491))
+            new_image.save('a1b1c1.png')
+            self.graphic_label.setPixmap(QPixmap('a1b1c1.png'))
+        else:
+            x = np.arange(-10, 10, 0.01)
+            y = eval(self.lineEdit.text())  # планирую сделать безопасный eval, с проверкой на содержимое lineEdit'а
+            plt.axis([-10, 10, y[len(y) // 2] - 10, y[len(y) // 2] + 10])
+            # не работает для sin, cos и тригонометрических функций
+            ax.grid(color='grey',  # цвет линий # Сетка графика
+                    linewidth=1,  # толщина # Сетка графика
+                    linestyle='-')  # начертание # Сетка графика
+            plt.plot(x, y, "g-")  # Построение графика
+            # X - axis
+            ax.axhline(y=0, color='k')
+            # Y - axis
+            ax.axvline(x=0, color='k')
+            plt.savefig('abc.png')
+            image = Image.open('abc.png')
+            new_image = image.resize((491, 491))
+            new_image.save('a1b1c1.png')
+            self.graphic_label.setPixmap(QPixmap('a1b1c1.png'))
+
     def exit(self):
         self.close()
         self.mainMenu.show()
+
     def addMainMenu(self, mainMenu):
         self.mainMenu = mainMenu
 
+
+class Diagram_draw(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('diagram.ui', self)  # делал конкретный путь, можно заменить
+        self.backButton.clicked.connect(self.exit)
+        self.mainMenu = None
+
+    def exit(self):
+        self.close()
+        self.mainMenu.show()
+
+    def addMainMenu(self, mainMenu):
+        self.mainMenu = mainMenu
 
 
 class Autorization(QWidget):
@@ -58,11 +131,10 @@ class Autorization(QWidget):
         self.registerButton.clicked.connect(self.user_registration)
         self.loginButton.clicked.connect(self.user_login)
         self.count = 0
-        self.changebutton.clicked.connect(self.pass_change)
+        self.changebutton.clicked.connect(self.passchange)
         self.changeLabel.hide()
         self.lineEdit.hide()
         self.changebutton.hide()
-
 
     def user_login(self):
         db = sqlite3.connect('accounts.sqlite')
@@ -80,9 +152,9 @@ class Autorization(QWidget):
         sql.execute(f"""SELECT LOGIN FROM users WHERE login = '{user_login}'""")
         if sql.fetchone() is None:
             self.warningLabel.setText('User is not registered')
-            #sql.execute(f"""INSERT INTO users VALUES (?, ?)""", (user_login, user_password))
-            #db.commit()
-            #print('Your account is registered')
+            sql.execute(f"""INSERT INTO users VALUES (?, ?)""", (user_login, user_password))
+            db.commit()
+            print('Your account is registered')
         else:
             sql.execute(f"""SELECT PASSWORD FROM users WHERE password = '{user_password}' AND login = '{user_login}'""")
             if sql.fetchone() is None:
@@ -101,6 +173,7 @@ class Autorization(QWidget):
                 self.mainMenu.setEnabled(True)
                 self.count = 0
                 self.close()
+
     def user_registration(self):
         db = sqlite3.connect('accounts.sqlite')
         sql = db.cursor()  # work with database
@@ -133,15 +206,20 @@ class Autorization(QWidget):
             else:
                 self.warningLabel.setText('User is already registered')
 
-    #def pass_change(self):
-        #if len(self.lineEdit.text()) > 4:
-            #sql.execute(f"""UPDATE users SET password = '{self.lineEdit.text()}' WHERE login = '{self.nickEdit.text()}'""")
-            #db.commit()
-            #self.check = True
-            #self.mainMenu.setEnabled(True)
-            #self.close()
-        #else:
-            #self.warningLabel.setText('Wrong password')
+    def passchange(self):
+        db = sqlite3.connect('accounts.sqlite')
+        sql = db.cursor()  # work with database
+        user_login = self.nickEdit.text()
+        user_password = self.lineEdit.text()
+        print(user_password, user_login)
+        if len(user_password) > 4:
+            sql.execute(f"""UPDATE users SET password = '{user_password}' WHERE login = '{user_login}'""")
+            db.commit()
+            self.check = True
+            self.mainMenu.setEnabled(True)
+            self.close()
+        else:
+            self.labelSymb.setText('Less than 5 symbols')
 
     def checkAutorization(self):
         return self.check
@@ -156,9 +234,11 @@ class MainMenu(QMainWindow):
         uic.loadUi('mainMenu.ui', self)
 
         self.function_draw = None
+        self.diagram_draw = None
 
         self.startButton.clicked.connect(self.startFunc)
         self.exitButton.clicked.connect(self.exit)
+        self.pushButton.clicked.connect(self.startDiagram)
 
     def exit(self):
         sys.exit()
@@ -170,6 +250,14 @@ class MainMenu(QMainWindow):
 
     def addFunc(self, function_draw):
         self.function_draw = function_draw
+
+    def addDiagram(self, diagram_draw):
+        self.diagram_draw = diagram_draw
+
+    def startDiagram(self):
+        self.close()
+        self.diagram_draw.show()
+        self.diagram_draw.setEnabled(True)
 
 
 class FuncPunk(QObject):
@@ -185,10 +273,13 @@ class FuncPunk(QObject):
         self.mainMenu.setEnabled(False)
         self.fuction_draw.addMainMenu(self.mainMenu)
 
-
         self.autorization = Autorization()
         self.autorization.addMenu(self.mainMenu)
         self.autorization.show()
+
+        self.diagram_draw = Diagram_draw()
+        self.diagram_draw.addMainMenu(self.mainMenu)
+        self.mainMenu.addDiagram(self.diagram_draw)
 
 
 if __name__ == '__main__':
