@@ -136,7 +136,6 @@
     <property name="text">
      <string> Attention! Special sybols will be looking like:
  x to the power of y: x ** y
- square root from x: sqrt(x)
  root n power from x: x ** (1./n) 
  5x: 5 * x</string>
     </property>

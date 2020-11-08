@@ -9,7 +9,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.Qt import pyqtSignal
 import sqlite3
-from math import sin, cos, tan
+from math import sin, cos, tan, sqrt
 
 
 class Function_draw(QMainWindow):
@@ -83,7 +83,8 @@ class Function_draw(QMainWindow):
         else:
             x = np.arange(-10, 10, 0.01)
             y = eval(self.lineEdit.text())  # планирую сделать безопасный eval, с проверкой на содержимое lineEdit'а
-            plt.axis([-10, 10, y[len(y) // 2] - 10, y[len(y) // 2] + 10])
+            specials = {'sqrt': sqrt}
+            plt.axis([x[0], x[-1], -10, 10]) #min(y) - 10, #max(y) + 10
             # не работает для sin, cos и тригонометрических функций
             ax.grid(color='grey',  # цвет линий # Сетка графика
                     linewidth=1,  # толщина # Сетка графика
