@@ -84,7 +84,7 @@ class Function_draw(QMainWindow):
             x = np.arange(-10, 10, 0.01)
             y = eval(self.lineEdit.text())  # планирую сделать безопасный eval, с проверкой на содержимое lineEdit'а
             specials = {'sqrt': sqrt}
-            plt.axis([x[0], x[-1], -10, 10]) #min(y) - 10, #max(y) + 10
+            plt.axis([x[0], x[-1], min(y) - y[len(y) // 2], max(y) + y[len(y) // 2]]) #min(y) - 10, #max(y) + 10
             # не работает для sin, cos и тригонометрических функций
             ax.grid(color='grey',  # цвет линий # Сетка графика
                     linewidth=1,  # толщина # Сетка графика
@@ -153,9 +153,6 @@ class Autorization(QWidget):
         sql.execute(f"""SELECT LOGIN FROM users WHERE login = '{user_login}'""")
         if sql.fetchone() is None:
             self.warningLabel.setText('User is not registered')
-            sql.execute(f"""INSERT INTO users VALUES (?, ?)""", (user_login, user_password))
-            db.commit()
-            print('Your account is registered')
         else:
             sql.execute(f"""SELECT PASSWORD FROM users WHERE password = '{user_password}' AND login = '{user_login}'""")
             if sql.fetchone() is None:
