@@ -29,76 +29,85 @@ class Function_draw(QMainWindow):
         elif self.SinRadioButton.isChecked():
             plt.axis([-10, 10, -10, 10])
             x = np.arange(-10, 4 * np.pi, 0.1)  # start,stop,step
-            y = np.sin(x)
-            # не работает для sin, cos и тригонометрических функций
-            ax.grid(color='grey',  # цвет линий # Сетка графика
-                    linewidth=1,  # толщина # Сетка графика
-                    linestyle='-')  # начертание # Сетка графика
-            plt.plot(x, y, "g-")  # Построение графика
-            # X - axis
-            ax.axhline(y=0, color='k')
-            # Y - axis
-            ax.axvline(x=0, color='k')
-            plt.savefig('abc.png')
-            image = Image.open('abc.png')
-            new_image = image.resize((491, 491))
-            new_image.save('a1b1c1.png')
-            self.graphic_label.setPixmap(QPixmap('a1b1c1.png'))
+            try:
+                y = np.sin(eval(self.lineEdit.text()))
+                ax.grid(color='grey',  # цвет линий # Сетка графика
+                        linewidth=1,  # толщина # Сетка графика
+                        linestyle='-')  # начертание # Сетка графика
+                plt.plot(x, y, "g-")  # Построение графика
+                # X - axis
+                ax.axhline(y=0, color='k')
+                # Y - axis
+                ax.axvline(x=0, color='k')
+                plt.savefig('abc.png')
+                image = Image.open('abc.png')
+                new_image = image.resize((491, 491))
+                new_image.save('a1b1c1.png')
+                self.graphic_label.setPixmap(QPixmap('a1b1c1.png'))
+            except:
+                self.error_Label.setText('Try again')
         elif self.TanRadioButton.isChecked():
             plt.axis([-10, 10, -10, 10])
             x = np.arange(-10, 4 * np.pi, 0.1)  # start,stop,step
-            y = np.tan(x)
-            # не работает для sin, cos и тригонометрических функций
-            ax.grid(color='grey',  # цвет линий # Сетка графика
-                    linewidth=1,  # толщина # Сетка графика
-                    linestyle='-')  # начертание # Сетка графика
-            plt.plot(x, y, "g-")  # Построение графика
-            # X - axis
-            ax.axhline(y=0, color='k')
-            # Y - axis
-            ax.axvline(x=0, color='k')
-            plt.savefig('abc.png')
-            image = Image.open('abc.png')
-            new_image = image.resize((491, 491))
-            new_image.save('a1b1c1.png')
-            self.graphic_label.setPixmap(QPixmap('a1b1c1.png'))
+            try:
+                y = np.tan(eval(self.lineEdit.text()))
+                ax.grid(color='grey',  # цвет линий # Сетка графика
+                        linewidth=1,  # толщина # Сетка графика
+                        linestyle='-')  # начертание # Сетка графика
+                plt.plot(x, y, "g-")  # Построение графика
+                # X - axis
+                ax.axhline(y=0, color='k')
+                # Y - axis
+                ax.axvline(x=0, color='k')
+                plt.savefig('abc.png')
+                image = Image.open('abc.png')
+                new_image = image.resize((491, 491))
+                new_image.save('a1b1c1.png')
+                self.graphic_label.setPixmap(QPixmap('a1b1c1.png'))
+            except:
+                self.error_Label.setText('Try again')
         elif self.CosRadioButton.isChecked():
             plt.axis([-10, 10, -10, 10])
             x = np.arange(-10, 4 * np.pi, 0.1)  # start,stop,step
-            y = np.cos(x)
-            # не работает для sin, cos и тригонометрических функций
-            ax.grid(color='grey',  # цвет линий # Сетка графика
-                    linewidth=1,  # толщина # Сетка графика
-                    linestyle='-')  # начертание # Сетка графика
-            plt.plot(x, y, "g-")  # Построение графика
-            # X - axis
-            ax.axhline(y=0, color='k')
-            # Y - axis
-            ax.axvline(x=0, color='k')
-            plt.savefig('abc.png')
-            image = Image.open('abc.png')
-            new_image = image.resize((491, 491))
-            new_image.save('a1b1c1.png')
-            self.graphic_label.setPixmap(QPixmap('a1b1c1.png'))
+            try:
+                y = np.cos(eval(self.lineEdit.text()))
+                ax.grid(color='grey',  # цвет линий # Сетка графика
+                        linewidth=1,  # толщина # Сетка графика
+                        linestyle='-')  # начертание # Сетка графика
+                plt.plot(x, y, "g-")  # Построение графика
+                # X - axis
+                ax.axhline(y=0, color='k')
+                # Y - axis
+                ax.axvline(x=0, color='k')
+                plt.savefig('abc.png')
+                image = Image.open('abc.png')
+                new_image = image.resize((491, 491))
+                new_image.save('a1b1c1.png')
+                self.graphic_label.setPixmap(QPixmap('a1b1c1.png'))
+            except:
+                self.error_Label.setText('Try again')
         else:
-            x = np.arange(-10, 10, 0.01)
-            y = eval(self.lineEdit.text())  # планирую сделать безопасный eval, с проверкой на содержимое lineEdit'а
-            specials = {'sqrt': sqrt}
-            plt.axis([x[0], x[-1], min(y) - y[len(y) // 2], max(y) + y[len(y) // 2]]) #min(y) - 10, #max(y) + 10
-            # не работает для sin, cos и тригонометрических функций
-            ax.grid(color='grey',  # цвет линий # Сетка графика
-                    linewidth=1,  # толщина # Сетка графика
-                    linestyle='-')  # начертание # Сетка графика
-            plt.plot(x, y, "g-")  # Построение графика
-            # X - axis
-            ax.axhline(y=0, color='k')
-            # Y - axis
-            ax.axvline(x=0, color='k')
-            plt.savefig('abc.png')
-            image = Image.open('abc.png')
-            new_image = image.resize((491, 491))
-            new_image.save('a1b1c1.png')
-            self.graphic_label.setPixmap(QPixmap('a1b1c1.png'))
+            try:
+                x = np.arange(-10, 10, 0.01)
+                y = eval(self.lineEdit.text())  # планирую сделать безопасный eval, с проверкой на содержимое lineEdit'а
+                specials = {'sqrt': sqrt}
+                plt.axis([x[0], x[-1], min(y) - y[len(y) // 2], max(y) + y[len(y) // 2]]) #min(y) - 10, #max(y) + 10
+                # не работает для sin, cos и тригонометрических функций
+                ax.grid(color='grey',  # цвет линий # Сетка графика
+                        linewidth=1,  # толщина # Сетка графика
+                        linestyle='-')  # начертание # Сетка графика
+                plt.plot(x, y, "g-")  # Построение графика
+                # X - axis
+                ax.axhline(y=0, color='k')
+                # Y - axis
+                ax.axvline(x=0, color='k')
+                plt.savefig('abc.png')
+                image = Image.open('abc.png')
+                new_image = image.resize((491, 491))
+                new_image.save('a1b1c1.png')
+                self.graphic_label.setPixmap(QPixmap('a1b1c1.png'))
+            except:
+                self.error_Label.setText('Try again')
 
     def exit(self):
         self.close()
