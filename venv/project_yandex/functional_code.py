@@ -31,8 +31,17 @@ class Function_draw(QMainWindow):
         if self.lineEdit.text() == '' and self.NoneRadioButton.isChecked():
             self.error_Label.setText('Write a func')
         elif self.SinRadioButton.isChecked():
-            plt.axis([-10, 10, -10, 10])
-            x = np.arange(-10, 4 * np.pi, 0.1)  # start,stop,step
+            if self.x_start.text() == '' or self.x_end.text() == '':
+                plt.axis([-10, 10, -10, 10])
+                x = np.arange(-10, 4 * np.pi, 0.1)  # start,stop,step
+                self.error_Label.setText('')
+            else:
+                try:
+                    plt.axis([-10, 10, -10, 10])
+                    x = np.arange(eval(self.x_start.text()), eval(self.x_end.text()), 0.1)
+                    self.error_Label.setText('')
+                except:
+                    self.error_Label.setText('X range is wrong or not integer')
             try:
                 y = np.sin(eval(self.lineEdit.text()))
                 ax.grid(color='grey',  # цвет линий # Сетка графика
@@ -48,6 +57,7 @@ class Function_draw(QMainWindow):
                 new_image = image.resize((491, 491))
                 new_image.save('a1b1c1.png')
                 self.graphic_label.setPixmap(QPixmap('a1b1c1.png'))
+                self.error_Label.setText('')
             except:
                 self.error_Label.setText('Try again')
 
@@ -63,12 +73,19 @@ class Function_draw(QMainWindow):
                     sql.execute(f"""SELECT functions FROM users WHERE login = '{self.user_login}'""")
                     bef_func = list(sql.fetchone())
                 sql.execute(
-                    f"UPDATE users SET functions = '{'SIN function writing error! ' + bef_func[0] + ';' + currentFuntion}' WHERE login = '{self.user_login}'")
+                    f"UPDATE users SET functions = '{bef_func[0] + ';' + currentFuntion + ' !SIN function writing error! '}' WHERE login = '{self.user_login}'")
                 db.commit()
 
         elif self.TanRadioButton.isChecked():
-            plt.axis([-10, 10, -10, 10])
-            x = np.arange(-10, 4 * np.pi, 0.1)  # start,stop,step
+            if self.x_start.text() == '' or self.x_end.text() == '':
+                plt.axis([-10, 10, -10, 10])
+                x = np.arange(-10, 4 * np.pi, 0.1)  # start,stop,step
+            else:
+                try:
+                    plt.axis([-10, 10, -10, 10])
+                    x = np.arange(eval(self.x_start.text()), eval(self.x_end.text()), 0.1)
+                except:
+                    self.error_Label.setText('X range is wrong or not integer')
             try:
                 y = np.tan(eval(self.lineEdit.text()))
                 ax.grid(color='grey',  # цвет линий # Сетка графика
@@ -84,6 +101,7 @@ class Function_draw(QMainWindow):
                 new_image = image.resize((491, 491))
                 new_image.save('a1b1c1.png')
                 self.graphic_label.setPixmap(QPixmap('a1b1c1.png'))
+                self.error_Label.setText('')
             except:
                 self.error_Label.setText('Try again')
 
@@ -99,11 +117,18 @@ class Function_draw(QMainWindow):
                     sql.execute(f"""SELECT functions FROM users WHERE login = '{self.user_login}'""")
                     bef_func = list(sql.fetchone())
                 sql.execute(
-                    f"UPDATE users SET functions = '{'TAN function writing error! ' + bef_func[0] + ';' + currentFuntion}' WHERE login = '{self.user_login}'")
+                    f"UPDATE users SET functions = '{bef_func[0] + ';' + currentFuntion + ' !TAN function writing error! '}' WHERE login = '{self.user_login}'")
                 db.commit()
         elif self.CosRadioButton.isChecked():
-            plt.axis([-10, 10, -10, 10])
-            x = np.arange(-10, 4 * np.pi, 0.1)  # start,stop,step
+            if self.x_start.text() == '' or self.x_end.text() == '':
+                plt.axis([-10, 10, -10, 10])
+                x = np.arange(-10, 4 * np.pi, 0.1)  # start,stop,step
+            else:
+                try:
+                    plt.axis([-10, 10, -10, 10])
+                    x = np.arange(eval(self.x_start.text()), eval(self.x_end.text()), 0.1)
+                except:
+                    self.error_Label.setText('X range is wrong or not integer')
             try:
                 y = np.cos(eval(self.lineEdit.text()))
                 ax.grid(color='grey',  # цвет линий # Сетка графика
@@ -119,6 +144,7 @@ class Function_draw(QMainWindow):
                 new_image = image.resize((491, 491))
                 new_image.save('a1b1c1.png')
                 self.graphic_label.setPixmap(QPixmap('a1b1c1.png'))
+                self.error_Label.setText('')
             except:
                 self.error_Label.setText('Try again')
 
@@ -134,7 +160,7 @@ class Function_draw(QMainWindow):
                     sql.execute(f"""SELECT functions FROM users WHERE login = '{self.user_login}'""")
                     bef_func = list(sql.fetchone())
                 sql.execute(
-                    f"UPDATE users SET functions = '{'COS function writing error! ' + bef_func[0] + ';' + currentFuntion}' WHERE login = '{self.user_login}'")
+                    f"UPDATE users SET functions = '{bef_func[0] + ';' + currentFuntion + ' !COS function writing error! '}' WHERE login = '{self.user_login}'")
                 db.commit()
         else:
             try:
@@ -211,6 +237,7 @@ class Function_draw(QMainWindow):
                         sql.execute(
                             f"UPDATE users SET functions = '{bef_func[0] + ';' + currentFuntion}' WHERE login = '{self.user_login}'")
                         db.commit()
+                        self.error_Label.setText('')
 
 
 
@@ -229,7 +256,7 @@ class Function_draw(QMainWindow):
                             sql.execute(f"""SELECT functions FROM users WHERE login = '{self.user_login}'""")
                             bef_func = list(sql.fetchone())
                         sql.execute(
-                            f"UPDATE users SET functions = '{'X range error! ' + bef_func[0] + ';' + currentFuntion}' WHERE login = '{self.user_login}'")
+                            f"UPDATE users SET functions = '{bef_func[0] + ';' + currentFuntion + ' !X range error! '}' WHERE login = '{self.user_login}'")
                         db.commit()
 
 
@@ -251,7 +278,7 @@ class Function_draw(QMainWindow):
                     sql.execute(f"""SELECT functions FROM users WHERE login = '{self.user_login}'""")
                     bef_func = list(sql.fetchone())
                 sql.execute(
-                    f"UPDATE users SET functions = '{'function writing error! ' + bef_func[0] + ';' + currentFuntion}' WHERE login = '{self.user_login}'")
+                    f"UPDATE users SET functions = '{bef_func[0] + ';' + currentFuntion + ' !function writing error! '}' WHERE login = '{self.user_login}'")
                 db.commit()
 
     def exit(self):
